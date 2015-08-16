@@ -20,30 +20,34 @@
 ##############################################################################
 
 # Imports
+import re                                       # use a regex later to eliminate punctuation from words
 
 # Body
-
-pledge_histogram = {}
 
 def histogram_old(s):
     d = dict()
     for c in s:
-        if c not in d:
-            d[c] = 1
-        else:
-            d[c] += 1
+        d[c] = 1 + d.get(c, 0)
     return d
 
-def histogram_new(s):
-    pass
+def histogram_new(l):
+    new_d = dict()
+    for word in l:
+        new_d[word] = 1 + new_d.get(word, 0)
+    return new_d
 
 def get_pledge_list():
     """ Opens pledge.txt and converts to a list, each item is a word in 
-    the order it appears in the original file. returns the list.
+    the order it appears in the original file. Returns the list.
     """
-    # Your code here.
-    pass
-    #return pledge_list (uncomment this)
+    pledge_list = []
+    with open('pledge.txt') as f:
+        pledge_list = re.split("[\s.:,]\s*", f.read())                 
+        # using a regex to eliminate specific end-of-line punctuation chars that are followed
+        # by any whitespace characters, but not eliminate the hyphen mid-word
+        # (just invoking .split() leaves items like "try:")
+        pledge_list.remove('')                                       # remove any blank items
+    return pledge_list
 
 ##############################################################################
 def main():  # DO NOT CHANGE BELOW
